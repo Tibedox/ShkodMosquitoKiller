@@ -26,6 +26,11 @@ public class MyGame extends ApplicationAdapter {
 
 	@Override
 	public void render () {
+		// игровые события
+		for (int i = 0; i < mosq.length; i++) {
+			mosq[i].fly();
+		}
+
 		// отрисовка всех изображений
 		batch.begin();
 		// фон
