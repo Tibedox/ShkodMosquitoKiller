@@ -9,25 +9,24 @@ public class MyGame extends ApplicationAdapter {
 	public static final float SCR_WIDTH = 1280, SCR_HEIGHT = 720;
 
 	SpriteBatch batch;
-	Texture img;
+	Texture imgBG;
 	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+		imgBG = new Texture("landscape.jpg");
 	}
 
 	@Override
 	public void render () {
-		ScreenUtils.clear(1, 0, 0, 1);
 		batch.begin();
-		batch.draw(img, 0, 0);
+		batch.draw(imgBG, 0, 0, SCR_WIDTH, SCR_HEIGHT);
 		batch.end();
 	}
 	
 	@Override
 	public void dispose () {
 		batch.dispose();
-		img.dispose();
+		imgBG.dispose();
 	}
 }
