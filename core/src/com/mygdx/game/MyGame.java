@@ -37,7 +37,7 @@ public class MyGame extends ApplicationAdapter {
 		batch.draw(imgBG, 0, 0, SCR_WIDTH, SCR_HEIGHT);
 		// комары
 		for (int i = 0; i < mosq.length; i++) {
-			batch.draw(imgMosquito, mosq[i].x, mosq[i].y, mosq[i].width, mosq[i].height);
+			batch.draw(imgMosquito, mosq[i].scrX(), mosq[i].scrY(), mosq[i].width, mosq[i].height, 0, 0, 500, 500, mosq[i].flip(), false);
 		}
 		batch.end();
 	}
