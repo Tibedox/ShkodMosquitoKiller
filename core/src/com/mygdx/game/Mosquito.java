@@ -3,9 +3,11 @@ package com.mygdx.game;
 import com.badlogic.gdx.math.MathUtils;
 
 public class Mosquito {
-    float x, y;
+    private float x, y;
     float width, height;
-    float vx, vy;
+    private float vx, vy;
+    int phase;
+    private int nPhases = 10;
 
     Mosquito() {
         x = MathUtils.random(0, MyGame.SCR_WIDTH);
@@ -19,6 +21,12 @@ public class Mosquito {
         x += vx;
         y += vy;
         outBounds();
+        changePhase();
+    }
+
+    private void changePhase(){
+        if(++phase == nPhases) phase = 0;
+        //phase = ++phase%nPhases;
     }
 
     float scrX(){
@@ -34,7 +42,7 @@ public class Mosquito {
        return false;
     }
 
-    void outBounds(){
+    private void outBounds(){
         if(x<0-width/2) x = MyGame.SCR_WIDTH;
         if(x>MyGame.SCR_WIDTH+width/2) x = 0;
         if(y<0-height/2) y = MyGame.SCR_HEIGHT;
