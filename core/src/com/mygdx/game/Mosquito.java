@@ -8,6 +8,7 @@ public class Mosquito {
     private float vx, vy;
     int phase;
     private int nPhases = 10;
+    boolean isAlive;
 
     Mosquito() {
         x = MathUtils.random(0, MyGame.SCR_WIDTH);
@@ -15,13 +16,16 @@ public class Mosquito {
         width = height = MathUtils.random(100, 200);
         vx = MathUtils.random(-5f, 5);
         vy = MathUtils.random(-5f, 5);
+        isAlive = true;
     }
 
     void fly(){
         x += vx;
         y += vy;
-        outBounds();
-        changePhase();
+        if(isAlive) {
+            outBounds();
+            changePhase();
+        }
     }
 
     private void changePhase(){
@@ -47,5 +51,16 @@ public class Mosquito {
         if(x>MyGame.SCR_WIDTH+width/2) x = 0;
         if(y<0-height/2) y = MyGame.SCR_HEIGHT;
         if(y>MyGame.SCR_HEIGHT+height/2) y = 0;
+    }
+
+    boolean hit(float tx, float ty){
+        return x-width/2<tx && tx<x+width/2 && y-height/2<ty && ty<y+height/2;
+    }
+
+    void kill(){
+        vx = 0;
+        vy = -6;
+        phase = 10;
+        isAlive = false;
     }
 }
