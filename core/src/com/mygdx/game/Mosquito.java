@@ -13,7 +13,7 @@ public class Mosquito {
     Mosquito() {
         x = MathUtils.random(0, MyGame.SCR_WIDTH);
         y = MathUtils.random(0, MyGame.SCR_HEIGHT);
-        width = height = MathUtils.random(100, 200);
+        width = height = MathUtils.random(80, 200);
         vx = MathUtils.random(-5f, 5);
         vy = MathUtils.random(-5f, 5);
         isAlive = true;
@@ -29,6 +29,7 @@ public class Mosquito {
     }
 
     private void changePhase(){
+
         if(++phase == nPhases) phase = 0;
         //phase = ++phase%nPhases;
     }

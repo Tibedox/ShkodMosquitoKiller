@@ -2,9 +2,11 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 
@@ -16,10 +18,11 @@ public class MyGame extends ApplicationAdapter {
 	Vector3 touch;
 
 	Texture imgBG;
-	Texture imgMosquito;
 	Texture[] imgMosq = new Texture[11];
 
-	Mosquito[] mosq = new Mosquito[110];
+	Sound[] sndMosq = new Sound[5];
+
+	Mosquito[] mosq = new Mosquito[15];
 	
 	@Override
 	public void create () {
@@ -29,9 +32,11 @@ public class MyGame extends ApplicationAdapter {
 		touch = new Vector3();
 
 		imgBG = new Texture("landscape.jpg");
-		imgMosquito = new Texture("mosquito.png");
 		for (int i = 0; i < imgMosq.length; i++) {
 			imgMosq[i] = new Texture("mosq"+i+".png");
+		}
+		for (int i = 0; i < sndMosq.length; i++) {
+			sndMosq[i] = Gdx.audio.newSound(Gdx.files.internal("sound/mosq"+i+".mp3"));
 		}
 
 		for (int i = 0; i < mosq.length; i++) {
@@ -45,9 +50,10 @@ public class MyGame extends ApplicationAdapter {
 		if(Gdx.input.justTouched()){
 			touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
 			camera.unproject(touch);
-			for (int i = 0; i < mosq.length; i++) {
+			for (int i = mosq.length-1; i >=0; i--) {
 				if(mosq[i].hit(touch.x, touch.y)) {
 					mosq[i].kill();
+					sndMosq[MathUtils.random(0, 4)].play();
 					break;
 				}
 			}
@@ -75,9 +81,11 @@ public class MyGame extends ApplicationAdapter {
 	public void dispose () {
 		batch.dispose();
 		imgBG.dispose();
-		imgMosquito.dispose();
 		for (int i = 0; i < imgMosq.length; i++) {
 			imgMosq[i].dispose();
+		}
+		for (int i = 0; i < sndMosq.length; i++) {
+			sndMosq[i].dispose();
 		}
 	}
 }
