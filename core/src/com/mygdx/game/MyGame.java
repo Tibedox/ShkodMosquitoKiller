@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
@@ -17,12 +18,16 @@ public class MyGame extends ApplicationAdapter {
 	OrthographicCamera camera;
 	Vector3 touch;
 
+	BitmapFont font;
+
 	Texture imgBG;
 	Texture[] imgMosq = new Texture[11];
 
 	Sound[] sndMosq = new Sound[5];
 
 	Mosquito[] mosq = new Mosquito[15];
+
+	int frags;
 	
 	@Override
 	public void create () {
@@ -30,6 +35,8 @@ public class MyGame extends ApplicationAdapter {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCR_WIDTH, SCR_HEIGHT);
 		touch = new Vector3();
+
+		font = new BitmapFont();
 
 		imgBG = new Texture("landscape.jpg");
 		for (int i = 0; i < imgMosq.length; i++) {
@@ -54,6 +61,7 @@ public class MyGame extends ApplicationAdapter {
 				if(mosq[i].hit(touch.x, touch.y)) {
 					mosq[i].kill();
 					sndMosq[MathUtils.random(0, 4)].play();
+					frags++;
 					break;
 				}
 			}
@@ -74,6 +82,8 @@ public class MyGame extends ApplicationAdapter {
 		for (int i = 0; i < mosq.length; i++) {
 			batch.draw(imgMosq[mosq[i].phase], mosq[i].scrX(), mosq[i].scrY(), mosq[i].width, mosq[i].height, 0, 0, 500, 500, mosq[i].flip(), false);
 		}
+		// тексты
+		font.draw(batch, "FRAGS: "+frags, 10, SCR_HEIGHT-10);
 		batch.end();
 	}
 	
@@ -87,5 +97,6 @@ public class MyGame extends ApplicationAdapter {
 		for (int i = 0; i < sndMosq.length; i++) {
 			sndMosq[i].dispose();
 		}
+		font.dispose();
 	}
 }
