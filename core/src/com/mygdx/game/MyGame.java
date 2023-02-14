@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.TimeUtils;
 
 public class MyGame extends ApplicationAdapter {
 	public static final float SCR_WIDTH = 1280, SCR_HEIGHT = 720;
@@ -30,6 +31,7 @@ public class MyGame extends ApplicationAdapter {
 	Mosquito[] mosq = new Mosquito[15];
 
 	int frags;
+	long time, timeLast;
 	
 	@Override
 	public void create () {
@@ -50,10 +52,12 @@ public class MyGame extends ApplicationAdapter {
 		for (int i = 0; i < mosq.length; i++) {
 			mosq[i] = new Mosquito();
 		}
+		timeLast = TimeUtils.millis();
 	}
 
 	@Override
 	public void render () {
+		time = TimeUtils.timeSinceMillis(timeLast);
 		// обработка касаний (или кликов)
 		if(Gdx.input.justTouched()){
 			touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
@@ -85,6 +89,7 @@ public class MyGame extends ApplicationAdapter {
 		}
 		// тексты
 		font.draw(batch, "FRAGS: "+frags, 10, SCR_HEIGHT-10);
+		font.draw(batch, "TIME: "+time/1000, SCR_WIDTH-400, SCR_HEIGHT-10);
 		batch.end();
 	}
 	
