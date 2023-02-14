@@ -89,7 +89,7 @@ public class MyGame extends ApplicationAdapter {
 		}
 		// тексты
 		font.draw(batch, "FRAGS: "+frags, 10, SCR_HEIGHT-10);
-		font.draw(batch, "TIME: "+time/1000, SCR_WIDTH-400, SCR_HEIGHT-10);
+		font.draw(batch, "TIME: "+timeToString(time), SCR_WIDTH-300, SCR_HEIGHT-10);
 		batch.end();
 	}
 	
@@ -115,5 +115,14 @@ public class MyGame extends ApplicationAdapter {
 		parameter.borderColor = Color.BLACK;
 		parameter.characters = "абвгдеёжзийклмнопрстуфхцчшщъыьэюяabcdefghijklmnopqrstuvwxyzАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"´`'<>";;
 		font = generator.generateFont(parameter);
+	}
+
+	String timeToString(long time){
+		long s = time/1000;
+		long m = s/60;
+		long h = m/60;
+		m = m%60;
+		s = s%60%60;
+		return h+":"+m/10+m%10+":"+s/10+s%10;
 	}
 }
