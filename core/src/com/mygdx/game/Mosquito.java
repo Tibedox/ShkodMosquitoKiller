@@ -10,7 +10,6 @@ public class Mosquito {
     private int nPhases = 10;
     boolean isAlive;
 
-
     Mosquito() {
         x = MathUtils.random(0, MyGame.SCR_WIDTH);
         y = MathUtils.random(0, MyGame.SCR_HEIGHT);
