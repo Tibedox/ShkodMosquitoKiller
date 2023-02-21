@@ -22,16 +22,22 @@ public class MyGame extends ApplicationAdapter {
 	Vector3 touch;
 
 	BitmapFont font;
+	InputKeyboard keyboard;
 
 	Texture imgBG;
 	Texture[] imgMosq = new Texture[11];
 
 	Sound[] sndMosq = new Sound[5];
 
-	Mosquito[] mosq = new Mosquito[15];
+	Mosquito[] mosq = new Mosquito[5];
 
 	int frags;
 	long time, timeLast;
+
+	public static final int PLAY_GAME = 0, ENTER_NAME = 1, SHOW_RECORDS = 2;
+	int stateOfGame = PLAY_GAME;
+	String playerName;
+	long playerTime;
 	
 	@Override
 	public void create () {
@@ -40,6 +46,7 @@ public class MyGame extends ApplicationAdapter {
 		camera.setToOrtho(false, SCR_WIDTH, SCR_HEIGHT);
 		touch = new Vector3();
 		generateFonts();
+		keyboard = new InputKeyboard(SCR_WIDTH, SCR_HEIGHT, 10);
 
 		imgBG = new Texture("landscape.jpg");
 		for (int i = 0; i < imgMosq.length; i++) {
@@ -57,22 +64,34 @@ public class MyGame extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-		time = TimeUtils.timeSinceMillis(timeLast);
 		// обработка касаний (или кликов)
 		if(Gdx.input.justTouched()){
 			touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
 			camera.unproject(touch);
-			for (int i = mosq.length-1; i >=0; i--) {
+			for (int i = mosq.length-1; i >= 0; i--) {
 				if(mosq[i].hit(touch.x, touch.y) && mosq[i].isAlive) {
 					mosq[i].kill();
 					sndMosq[MathUtils.random(0, 4)].play();
 					frags++;
+					if(frags == mosq.length){
+						stateOfGame = ENTER_NAME;
+					}
 					break;
+				}
+			}
+			if(stateOfGame == ENTER_NAME) {
+				if(keyboard.endOfEdit(touch.x, touch.y)){
+					playerName = keyboard.getText();
+					playerTime = time;
+					stateOfGame = SHOW_RECORDS;
 				}
 			}
 		}
 
 		// игровые события
+		if(stateOfGame == PLAY_GAME) {
+			time = TimeUtils.timeSinceMillis(timeLast);
+		}
 		for (int i = 0; i < mosq.length; i++) {
 			mosq[i].fly();
 		}
@@ -90,6 +109,12 @@ public class MyGame extends ApplicationAdapter {
 		// тексты
 		font.draw(batch, "FRAGS: "+frags, 10, SCR_HEIGHT-10);
 		font.draw(batch, "TIME: "+timeToString(time), SCR_WIDTH-300, SCR_HEIGHT-10);
+		if(stateOfGame == ENTER_NAME){
+			keyboard.draw(batch);
+		}
+		if(stateOfGame == SHOW_RECORDS){
+			font.draw(batch, playerName+" .... "+timeToString(playerTime), 300, 400);
+		}
 		batch.end();
 	}
 	
