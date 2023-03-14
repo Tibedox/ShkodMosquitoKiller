@@ -30,6 +30,7 @@ public class MyGame extends ApplicationAdapter {
 	// ресуры (изображения и звуки)
 	Texture imgBG;
 	Texture[] imgMosq = new Texture[11];
+	Texture imgPause, imgPlay;
 	Sound[] sndMosq = new Sound[5];
 
 	// наши переменные и объекты
@@ -37,6 +38,7 @@ public class MyGame extends ApplicationAdapter {
 	Player[] players = new Player[6];
 	int frags;
 	long time, timeLast;
+	MButton btnPause;
 
 	// состояния игры
 	public static final int PLAY_GAME = 0, ENTER_NAME = 1, SHOW_RECORDS = 2;
@@ -52,6 +54,8 @@ public class MyGame extends ApplicationAdapter {
 		keyboard = new InputKeyboard(SCR_WIDTH, SCR_HEIGHT, 10);
 
 		imgBG = new Texture("landscape.jpg");
+		imgPause = new Texture("pause.png");
+		imgPlay = new Texture("play.png");
 		for (int i = 0; i < imgMosq.length; i++) {
 			imgMosq[i] = new Texture("mosq"+i+".png");
 		}
@@ -62,6 +66,7 @@ public class MyGame extends ApplicationAdapter {
 		for (int i = 0; i < players.length; i++) {
 			players[i] = new Player("Noname", 0);
 		}
+		btnPause = new MButton(imgPause, SCR_WIDTH/2, SCR_HEIGHT-10-60f/2, 60, 60);
 
 		loadTableOfRecords();
 		startOfGame();
@@ -85,6 +90,9 @@ public class MyGame extends ApplicationAdapter {
 						}
 						break;
 					}
+				}
+				if(btnPause.hit(touch.x, touch.y)){
+
 				}
 			} else if(stateOfGame == ENTER_NAME) {
 				// если завершён ввод имени, состояние игры переключается на показ таблицы рекордов
@@ -123,6 +131,7 @@ public class MyGame extends ApplicationAdapter {
 		// тексты
 		font.draw(batch, "FRAGS: "+frags, 10, SCR_HEIGHT-10);
 		font.draw(batch, "TIME: "+timeToString(time), SCR_WIDTH-300, SCR_HEIGHT-10);
+		batch.draw(btnPause.img, btnPause.scrX(), btnPause.scrY(), btnPause.width, btnPause.height);
 		if(stateOfGame == ENTER_NAME){
 			keyboard.draw(batch);
 		}
@@ -140,6 +149,8 @@ public class MyGame extends ApplicationAdapter {
 	public void dispose () {
 		batch.dispose();
 		imgBG.dispose();
+		imgPause.dispose();
+		imgPlay.dispose();
 		for (int i = 0; i < imgMosq.length; i++) {
 			imgMosq[i].dispose();
 		}
