@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -16,29 +17,30 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 
 public class MyGame extends ApplicationAdapter {
+	// задаём константы ширину и высоту экрана
 	public static final float SCR_WIDTH = 1280, SCR_HEIGHT = 720;
 
+	// ссылки на системные объекты
 	SpriteBatch batch;
 	OrthographicCamera camera;
 	Vector3 touch;
-
 	BitmapFont font;
 	InputKeyboard keyboard;
 
+	// ресуры (изображения и звуки)
 	Texture imgBG;
 	Texture[] imgMosq = new Texture[11];
-
 	Sound[] sndMosq = new Sound[5];
 
+	// наши переменные и объекты
 	Mosquito[] mosq = new Mosquito[5];
-
+	Player[] players = new Player[6];
 	int frags;
 	long time, timeLast;
 
+	// состояния игры
 	public static final int PLAY_GAME = 0, ENTER_NAME = 1, SHOW_RECORDS = 2;
 	int stateOfGame = PLAY_GAME;
-
-	Player[] players = new Player[6];
 	
 	@Override
 	public void create () {
@@ -61,12 +63,13 @@ public class MyGame extends ApplicationAdapter {
 			players[i] = new Player("Noname", 0);
 		}
 
+		loadTableOfRecords();
 		startOfGame();
 	}
 
 	@Override
 	public void render () {
-		// обработка касаний (или кликов)
+		// ----------- обработка касаний (или кликов) ----------------------
 		if(Gdx.input.justTouched()){
 			touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
 			camera.unproject(touch);
@@ -76,6 +79,7 @@ public class MyGame extends ApplicationAdapter {
 						mosq[i].kill();
 						sndMosq[MathUtils.random(0, 4)].play();
 						frags++;
+						// если сбиты все комары, состояние игры переключается на ввод имени
 						if (frags == mosq.length) {
 							stateOfGame = ENTER_NAME;
 						}
@@ -83,25 +87,30 @@ public class MyGame extends ApplicationAdapter {
 					}
 				}
 			} else if(stateOfGame == ENTER_NAME) {
+				// если завершён ввод имени, состояние игры переключается на показ таблицы рекордов
 				if(keyboard.endOfEdit(touch.x, touch.y)){
 					players[players.length-1].name = keyboard.getText();
 					players[players.length-1].time = time;
+					sortTableOfRecords();
+					saveTableOfRecords();
 					stateOfGame = SHOW_RECORDS;
 				}
 			} else if(stateOfGame == SHOW_RECORDS) {
 				startOfGame();
 			}
 		}
+		//------------------------------------------------------------------
 
-		// игровые события
+		// ---------------------- игровые события --------------------------
 		if(stateOfGame == PLAY_GAME) {
 			time = TimeUtils.timeSinceMillis(timeLast);
 		}
 		for (int i = 0; i < mosq.length; i++) {
 			mosq[i].fly();
 		}
+		//------------------------------------------------------------------
 
-		// отрисовка всех изображений
+		// ------------ отрисовка всех изображений -------------------------
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
@@ -118,12 +127,13 @@ public class MyGame extends ApplicationAdapter {
 			keyboard.draw(batch);
 		}
 		if(stateOfGame == SHOW_RECORDS){
+			// выводим таблицу рекордов
 			for (int i = 0; i < players.length-1; i++) {
 				font.draw(batch, players[i].name+" .... "+timeToString(players[i].time), 500, 600-80*i);
-				sortPlayers();
 			}
 		}
 		batch.end();
+		//------------------------------------------------------------------
 	}
 	
 	@Override
@@ -169,7 +179,7 @@ public class MyGame extends ApplicationAdapter {
 		return h+":"+m/10+m%10+":"+s/10+s%10;
 	}
 
-	void sortPlayers(){
+	void sortTableOfRecords(){
 		for (int i = 0; i < players.length; i++) if(players[i].time == 0) players[i].time = 1000000;
 
 		for(int j = 0; j < players.length; j++) {
@@ -183,5 +193,22 @@ public class MyGame extends ApplicationAdapter {
 		}
 
 		for (int i = 0; i < players.length; i++) if(players[i].time == 1000000) players[i].time = 0;
+	}
+
+	void saveTableOfRecords(){
+		Preferences prefs = Gdx.app.getPreferences("ShkodTableOfRecords");
+		for (int i = 0; i < players.length; i++) {
+			prefs.putString("name"+i, players[i].name);
+			prefs.putLong("time"+i, players[i].time);
+		}
+		prefs.flush();
+	}
+
+	void loadTableOfRecords(){
+		Preferences prefs = Gdx.app.getPreferences("ShkodTableOfRecords");
+		for (int i = 0; i < players.length; i++) {
+			if(prefs.contains("name"+i)) players[i].name = prefs.getString("name"+i);
+			if(prefs.contains("time"+i)) players[i].time = prefs.getLong("time"+i);
+		}
 	}
 }
