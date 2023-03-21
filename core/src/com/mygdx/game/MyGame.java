@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Sound;
@@ -11,12 +12,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 
-public class MyGame extends ApplicationAdapter {
+public class MyGame extends Game {
 	// задаём константы ширину и высоту экрана
 	public static final float SCR_WIDTH = 1280, SCR_HEIGHT = 720;
 
@@ -37,12 +36,13 @@ public class MyGame extends ApplicationAdapter {
 	Mosquito[] mosq = new Mosquito[5];
 	Player[] players = new Player[6];
 	int frags;
-	long time, timeLast;
+	long time, timeStartGame, timePause;
 	MButton btnPause;
 
 	// состояния игры
 	public static final int PLAY_GAME = 0, ENTER_NAME = 1, SHOW_RECORDS = 2;
 	int stateOfGame = PLAY_GAME;
+	boolean pause;
 	
 	@Override
 	public void create () {
@@ -66,7 +66,7 @@ public class MyGame extends ApplicationAdapter {
 		for (int i = 0; i < players.length; i++) {
 			players[i] = new Player("Noname", 0);
 		}
-		btnPause = new MButton(imgPause, SCR_WIDTH/2, SCR_HEIGHT-10-60f/2, 60, 60);
+		btnPause = new MButton(imgPause, SCR_WIDTH/2, SCR_HEIGHT-5-70f/2, 70, 70);
 
 		loadTableOfRecords();
 		startOfGame();
@@ -79,20 +79,26 @@ public class MyGame extends ApplicationAdapter {
 			touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
 			camera.unproject(touch);
 			if(stateOfGame == PLAY_GAME) {
-				for (int i = mosq.length - 1; i >= 0; i--) {
-					if (mosq[i].hit(touch.x, touch.y) && mosq[i].isAlive) {
-						mosq[i].kill();
-						sndMosq[MathUtils.random(0, 4)].play();
-						frags++;
-						// если сбиты все комары, состояние игры переключается на ввод имени
-						if (frags == mosq.length) {
-							stateOfGame = ENTER_NAME;
+				if(!pause) {
+					for (int i = mosq.length - 1; i >= 0; i--) {
+						if (mosq[i].hit(touch.x, touch.y) && mosq[i].isAlive) {
+							mosq[i].kill();
+							sndMosq[MathUtils.random(0, 4)].play();
+							frags++;
+							// если сбиты все комары, состояние игры переключается на ввод имени
+							if (frags == mosq.length) {
+								stateOfGame = ENTER_NAME;
+							}
+							break;
 						}
-						break;
 					}
 				}
 				if(btnPause.hit(touch.x, touch.y)){
+					pause = !pause;
 
+					/*if(pause) btnPause.img = imgPlay;
+					else btnPause.img = imgPause;*/
+					 btnPause.img = pause ? imgPlay : imgPause;
 				}
 			} else if(stateOfGame == ENTER_NAME) {
 				// если завершён ввод имени, состояние игры переключается на показ таблицы рекордов
@@ -110,11 +116,17 @@ public class MyGame extends ApplicationAdapter {
 		//------------------------------------------------------------------
 
 		// ---------------------- игровые события --------------------------
-		if(stateOfGame == PLAY_GAME) {
-			time = TimeUtils.timeSinceMillis(timeLast);
-		}
-		for (int i = 0; i < mosq.length; i++) {
-			mosq[i].fly();
+		if(!pause) {
+			if (stateOfGame == PLAY_GAME) {
+				time = TimeUtils.millis() - timeStartGame - timePause;
+			}
+			for (int i = 0; i < mosq.length; i++) {
+				mosq[i].fly();
+			}
+		} else {
+			if (stateOfGame == PLAY_GAME) {
+				timePause = TimeUtils.millis() - timeStartGame - time;
+			}
 		}
 		//------------------------------------------------------------------
 
@@ -166,7 +178,7 @@ public class MyGame extends ApplicationAdapter {
 		}
 		time = 0;
 		frags = 0;
-		timeLast = TimeUtils.millis();
+		timeStartGame = TimeUtils.millis();
 		stateOfGame = PLAY_GAME;
 	}
 

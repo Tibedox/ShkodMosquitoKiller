@@ -29,7 +29,6 @@ public class Mosquito {
     }
 
     private void changePhase(){
-
         if(++phase == nPhases) phase = 0;
         //phase = ++phase%nPhases;
     }
