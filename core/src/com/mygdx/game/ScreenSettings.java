@@ -1,13 +1,18 @@
 package com.mygdx.game;
 
-import static com.mygdx.game.MyGame.*;
+import static com.mygdx.game.MyGame.SCR_HEIGHT;
+import static com.mygdx.game.MyGame.SCR_WIDTH;
+import static com.mygdx.game.MyGame.batch;
+import static com.mygdx.game.MyGame.camera;
+import static com.mygdx.game.MyGame.fontLarge;
+import static com.mygdx.game.MyGame.touch;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 
 
-public class ScreenIntro implements Screen {
+public class ScreenSettings implements Screen {
     // ссылка на главный класс игры
     MyGame mg;
 
@@ -15,18 +20,17 @@ public class ScreenIntro implements Screen {
     Texture imgBG;
 
     // кнопки
-    TextButton btnPlay;
-    TextButton btnSettings;
-    TextButton btnAbout;
-    TextButton btnExit;
+    TextButton btnSound;
+    TextButton btnMusic;
+    TextButton btnBack;
 
-    public ScreenIntro(MyGame myGame) {
+    public ScreenSettings(MyGame myGame) {
         mg = myGame;
-        imgBG = new Texture("landscape02.jpg");
-        btnPlay = new TextButton("Play", fontLarge, SCR_WIDTH/2, 500);
-        btnSettings = new TextButton("Settings", fontLarge, SCR_WIDTH/2, 400);
-        btnAbout = new TextButton("About", fontLarge, SCR_WIDTH/2, 300);
-        btnExit = new TextButton("Exit", fontLarge, SCR_WIDTH/2, 200);
+        imgBG = new Texture("landscape01.jpg");
+        btnSound = new TextButton("Sound On", fontLarge, SCR_WIDTH/2, 500);
+        btnMusic = new TextButton("Music On", fontLarge, SCR_WIDTH/2, 400);
+
+        btnBack = new TextButton("Back", fontLarge, SCR_WIDTH/2, 200);
     }
 
     @Override
@@ -40,17 +44,14 @@ public class ScreenIntro implements Screen {
         if(Gdx.input.justTouched()){
             touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touch);
-            if(btnPlay.hit(touch.x, touch.y)) {
-                mg.setScreen(mg.screenGame);
-            }
-            if(btnSettings.hit(touch.x, touch.y)) {
-                mg.setScreen(mg.screenSettings);
-            }
-            if(btnAbout.hit(touch.x, touch.y)) {
+            if(btnSound.hit(touch.x, touch.y)) {
 
             }
-            if(btnExit.hit(touch.x, touch.y)) {
-                Gdx.app.exit();
+            if(btnMusic.hit(touch.x, touch.y)) {
+
+            }
+            if(btnBack.hit(touch.x, touch.y)) {
+                mg.setScreen(mg.screenIntro);
             }
         }
         //------------------------------------------------------------------
@@ -64,10 +65,9 @@ public class ScreenIntro implements Screen {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         batch.draw(imgBG, 0, 0, SCR_WIDTH, SCR_HEIGHT); // фон
-        btnPlay.font.draw(batch, btnPlay.text, btnPlay.scrX(), btnPlay.scrY());
-        btnSettings.font.draw(batch, btnSettings.text, btnSettings.scrX(), btnSettings.scrY());
-        btnAbout.font.draw(batch, btnAbout.text, btnAbout.scrX(), btnAbout.scrY());
-        btnExit.font.draw(batch, btnExit.text, btnExit.scrX(), btnExit.scrY());
+        btnSound.font.draw(batch, btnSound.text, btnSound.scrX(), btnSound.scrY());
+        btnMusic.font.draw(batch, btnMusic.text, btnMusic.scrX(), btnMusic.scrY());
+        btnBack.font.draw(batch, btnBack.text, btnBack.scrX(), btnBack.scrY());
         batch.end();
         //------------------------------------------------------------------
     }

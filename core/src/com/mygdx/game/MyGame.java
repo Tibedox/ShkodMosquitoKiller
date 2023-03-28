@@ -28,6 +28,7 @@ public class MyGame extends Game {
 
 	// ссылки на экраны
 	ScreenIntro screenIntro;
+	ScreenSettings screenSettings;
 	ScreenGame screenGame;
 
 	@Override
@@ -42,6 +43,7 @@ public class MyGame extends Game {
 
 		// создаём экраны
 		screenIntro = new ScreenIntro(this);
+		screenSettings = new ScreenSettings(this);
 		screenGame = new ScreenGame(this);
 		setScreen(screenIntro);
 	}

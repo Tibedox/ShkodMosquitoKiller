@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 
 public class ScreenGame implements Screen {
+    // ссылка на главный класс игры
     MyGame mg;
 
     // ресуры (изображения и звуки)
