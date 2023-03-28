@@ -2,12 +2,12 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.Texture;
 
-public class MButton {
+public class ImageButton {
     float x, y;
     float width, height;
     Texture img;
 
-    public MButton(Texture img, float x, float y, float width, float height) {
+    public ImageButton(Texture img, float x, float y, float width, float height) {
         this.x = x;
         this.y = y;
         this.width = width;

@@ -6,17 +6,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.TimeUtils;
 
 public class ScreenGame implements Screen {
+    MyGame mg;
 
     // ресуры (изображения и звуки)
     Texture imgBG;
@@ -29,15 +24,15 @@ public class ScreenGame implements Screen {
     Player[] players = new Player[6];
     int frags;
     long time, timeStartGame, timePause;
-    MButton btnPause;
+    ImageButton btnPause;
 
     // состояния игры
     public static final int PLAY_GAME = 0, ENTER_NAME = 1, SHOW_RECORDS = 2;
     int stateOfGame = PLAY_GAME;
     boolean pause;
 
-    public ScreenGame() {
-
+    public ScreenGame(MyGame myGame) {
+        mg = myGame;
         imgBG = new Texture("landscape.jpg");
         imgPause = new Texture("pause.png");
         imgPlay = new Texture("play.png");
@@ -51,15 +46,14 @@ public class ScreenGame implements Screen {
         for (int i = 0; i < players.length; i++) {
             players[i] = new Player("Noname", 0);
         }
-        btnPause = new MButton(imgPause, SCR_WIDTH/2, SCR_HEIGHT-5-70f/2, 70, 70);
+        btnPause = new ImageButton(imgPause, SCR_WIDTH/2, SCR_HEIGHT-5-70f/2, 70, 70);
 
         loadTableOfRecords();
-        startOfGame();
     }
 
     @Override
     public void show() {
-
+        startOfGame();
     }
 
     @Override
@@ -100,7 +94,8 @@ public class ScreenGame implements Screen {
                     stateOfGame = SHOW_RECORDS;
                 }
             } else if(stateOfGame == SHOW_RECORDS) {
-                startOfGame();
+                mg.setScreen(mg.screenIntro);
+                //startOfGame();
             }
         }
         //------------------------------------------------------------------

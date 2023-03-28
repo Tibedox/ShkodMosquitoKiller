@@ -23,14 +23,16 @@ public class MyGame extends Game {
 	static SpriteBatch batch;
 	static OrthographicCamera camera;
 	static Vector3 touch;
-	static BitmapFont font;
+	static BitmapFont font, fontLarge;
 	static InputKeyboard keyboard;
 
+	// ссылки на экраны
 	ScreenIntro screenIntro;
 	ScreenGame screenGame;
 
 	@Override
 	public void create () {
+		// создаём системные объекты
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCR_WIDTH, SCR_HEIGHT);
@@ -38,13 +40,15 @@ public class MyGame extends Game {
 		generateFonts();
 		keyboard = new InputKeyboard(SCR_WIDTH, SCR_HEIGHT, 10);
 
-		screenIntro = new ScreenIntro();
-		screenGame = new ScreenGame();
+		// создаём экраны
+		screenIntro = new ScreenIntro(this);
+		screenGame = new ScreenGame(this);
 		setScreen(screenIntro);
 	}
 	
 	@Override
 	public void dispose () {
+		// очищаем память
 		batch.dispose();
 		font.dispose();
 		keyboard.dispose();
@@ -59,5 +63,8 @@ public class MyGame extends Game {
 		parameter.borderColor = Color.BLACK;
 		parameter.characters = "абвгдеёжзийклмнопрстуфхцчшщъыьэюяabcdefghijklmnopqrstuvwxyzАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"´`'<>";;
 		font = generator.generateFont(parameter);
+		parameter.size = 100;
+		fontLarge = generator.generateFont(parameter);
+		generator.dispose();
 	}
 }
