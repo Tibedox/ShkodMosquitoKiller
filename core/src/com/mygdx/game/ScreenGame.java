@@ -68,7 +68,9 @@ public class ScreenGame implements Screen {
                     for (int i = mosq.length - 1; i >= 0; i--) {
                         if (mosq[i].hit(touch.x, touch.y) && mosq[i].isAlive) {
                             mosq[i].kill();
-                            sndMosq[MathUtils.random(0, 4)].play();
+                            if(mg.isSoundOn) {
+                                sndMosq[MathUtils.random(0, 4)].play();
+                            }
                             frags++;
                             // если сбиты все комары, состояние игры переключается на ввод имени
                             if (frags == mosq.length) {

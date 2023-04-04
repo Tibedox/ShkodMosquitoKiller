@@ -13,7 +13,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 
 
-public class ScreenSettings implements Screen {
+public class ScreenAbout implements Screen {
     // ссылка на главный класс игры
     MyGame mg;
 
@@ -25,7 +25,7 @@ public class ScreenSettings implements Screen {
     TextButton btnMusic;
     TextButton btnBack;
 
-    public ScreenSettings(MyGame myGame) {
+    public ScreenAbout(MyGame myGame) {
         mg = myGame;
         imgBG = new Texture("landscape01.jpg");
         btnSound = new TextButton("Sound On", fontLarge, SCR_WIDTH/2, 500);

@@ -31,6 +31,9 @@ public class MyGame extends Game {
 	ScreenSettings screenSettings;
 	ScreenGame screenGame;
 
+	boolean isSoundOn = true;
+	boolean isMusicOn = true;
+
 	@Override
 	public void create () {
 		// создаём системные объекты
