@@ -25,6 +25,9 @@ public class ScreenGame implements Screen {
     Player[] players = new Player[6];
     int frags;
     long time, timeStartGame, timePause;
+
+    // кнопки
+    TextButton btnBack;
     ImageButton btnPause;
 
     // состояния игры
@@ -47,7 +50,9 @@ public class ScreenGame implements Screen {
         for (int i = 0; i < players.length; i++) {
             players[i] = new Player("Noname", 0);
         }
+
         btnPause = new ImageButton(imgPause, SCR_WIDTH/2, SCR_HEIGHT-5-70f/2, 70, 70);
+        btnBack = new TextButton("Back", font, SCR_WIDTH-80, 50);
 
         loadTableOfRecords();
     }
@@ -79,6 +84,9 @@ public class ScreenGame implements Screen {
                             break;
                         }
                     }
+                }
+                if(btnBack.hit(touch.x, touch.y)) {
+                    mg.setScreen(mg.screenIntro);
                 }
                 if(btnPause.hit(touch.x, touch.y)){
                     pause = !pause;
@@ -132,6 +140,7 @@ public class ScreenGame implements Screen {
         font.draw(batch, "FRAGS: "+frags, 10, SCR_HEIGHT-10);
         font.draw(batch, "TIME: "+timeToString(time), SCR_WIDTH-300, SCR_HEIGHT-10);
         batch.draw(btnPause.img, btnPause.scrX(), btnPause.scrY(), btnPause.width, btnPause.height);
+        btnBack.font.draw(batch, btnBack.text, btnBack.scrX(), btnBack.scrY());
         if(stateOfGame == ENTER_NAME){
             keyboard.draw(batch);
         }

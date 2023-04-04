@@ -47,7 +47,7 @@ public class ScreenIntro implements Screen {
                 mg.setScreen(mg.screenSettings);
             }
             if(btnAbout.hit(touch.x, touch.y)) {
-
+                mg.setScreen(mg.screenAbout);
             }
             if(btnExit.hit(touch.x, touch.y)) {
                 Gdx.app.exit();

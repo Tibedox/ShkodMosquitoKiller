@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -30,6 +31,7 @@ public class MyGame extends Game {
 	ScreenIntro screenIntro;
 	ScreenSettings screenSettings;
 	ScreenGame screenGame;
+	ScreenAbout screenAbout;
 
 	boolean isSoundOn = true;
 	boolean isMusicOn = true;
@@ -48,6 +50,7 @@ public class MyGame extends Game {
 		screenIntro = new ScreenIntro(this);
 		screenSettings = new ScreenSettings(this);
 		screenGame = new ScreenGame(this);
+		screenAbout = new ScreenAbout(this);
 		setScreen(screenIntro);
 	}
 	

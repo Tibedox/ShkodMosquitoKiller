@@ -10,6 +10,7 @@ import static com.mygdx.game.MyGame.touch;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 
 
@@ -25,15 +26,24 @@ public class ScreenSettings implements Screen {
     TextButton btnMusic;
     TextButton btnBack;
 
+    Music music;
+
     public ScreenSettings(MyGame myGame) {
         mg = myGame;
         imgBG = new Texture("landscape01.jpg");
+        music = Gdx.audio.newMusic(Gdx.files.internal("sound/mrsandman.mp3"));
+
+        music.setLooping(true);
+
         btnSound = new TextButton("Sound On", fontLarge, SCR_WIDTH/2, 500);
         btnMusic = new TextButton("Music On", fontLarge, SCR_WIDTH/2, 400);
 
         btnBack = new TextButton("Back", fontLarge, SCR_WIDTH/2, 200);
         loadSettings();
         updateButtons();
+        if(mg.isMusicOn) {
+            music.play();
+        }
     }
 
     @Override
@@ -53,6 +63,11 @@ public class ScreenSettings implements Screen {
             }
             if(btnMusic.hit(touch.x, touch.y)) {
                 mg.isMusicOn = !mg.isMusicOn;
+                if(mg.isMusicOn) {
+                    music.play();
+                } else {
+                    music.stop();
+                }
                 updateButtons();
             }
             if(btnBack.hit(touch.x, touch.y)) {
