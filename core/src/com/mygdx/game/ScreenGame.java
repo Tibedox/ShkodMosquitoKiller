@@ -18,7 +18,7 @@ public class ScreenGame implements Screen {
     Texture imgBG;
     Texture[] imgMosq = new Texture[11];
     Texture imgPause, imgPlay;
-    Sound[] sndMosq = new Sound[5];
+    Sound[] sndMosq = new Sound[25];
 
     // наши переменные и объекты
     Mosquito[] mosq = new Mosquito[5];
@@ -59,7 +59,13 @@ public class ScreenGame implements Screen {
 
     @Override
     public void show() {
-        startOfGame();
+        for (int i = 0; i < mosq.length; i++) {
+            mosq[i] = new Mosquito();
+        }
+        time = 0;
+        frags = 0;
+        timeStartGame = TimeUtils.millis();
+        stateOfGame = PLAY_GAME;
     }
 
     @Override
@@ -106,7 +112,6 @@ public class ScreenGame implements Screen {
                 }
             } else if(stateOfGame == SHOW_RECORDS) {
                 mg.setScreen(mg.screenIntro);
-                //startOfGame();
             }
         }
         //------------------------------------------------------------------
@@ -187,17 +192,6 @@ public class ScreenGame implements Screen {
         }
     }
 
-
-    void startOfGame(){
-        for (int i = 0; i < mosq.length; i++) {
-            mosq[i] = new Mosquito();
-        }
-        time = 0;
-        frags = 0;
-        timeStartGame = TimeUtils.millis();
-        stateOfGame = PLAY_GAME;
-    }
-
     String timeToString(long time){
         long s = time/1000;
         long m = s/60;
@@ -237,6 +231,13 @@ public class ScreenGame implements Screen {
         for (int i = 0; i < players.length; i++) {
             if(prefs.contains("name"+i)) players[i].name = prefs.getString("name"+i);
             if(prefs.contains("time"+i)) players[i].time = prefs.getLong("time"+i);
+        }
+    }
+
+    void clearTableOfRecords(){
+        for (int i = 0; i < players.length; i++) {
+            players[i].name = "Noname";
+            players[i].time = 0;
         }
     }
 }

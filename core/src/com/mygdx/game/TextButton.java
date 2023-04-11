@@ -28,6 +28,12 @@ public class TextButton {
         return y+height/2;
     }
 
+    void updateText(String text) {
+        this.text = text;
+        GlyphLayout gl = new GlyphLayout(font, text);
+        width = gl.width;
+    }
+
     boolean hit(float tx, float ty){
         return x-width/2<tx && tx<x+width/2 && y-height/2<ty && ty<y+height/2;
     }

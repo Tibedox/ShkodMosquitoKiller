@@ -24,6 +24,7 @@ public class ScreenSettings implements Screen {
     // кнопки
     TextButton btnSound;
     TextButton btnMusic;
+    TextButton btnClearRecords;
     TextButton btnBack;
 
     Music music;
@@ -35,10 +36,11 @@ public class ScreenSettings implements Screen {
 
         music.setLooping(true);
 
-        btnSound = new TextButton("Sound On", fontLarge, SCR_WIDTH/2, 500);
-        btnMusic = new TextButton("Music On", fontLarge, SCR_WIDTH/2, 400);
+        btnSound = new TextButton("Sound On", fontLarge, SCR_WIDTH/2, 550);
+        btnMusic = new TextButton("Music On", fontLarge, SCR_WIDTH/2, 450);
+        btnClearRecords = new TextButton("Clear Records", fontLarge, SCR_WIDTH/2, 350);
 
-        btnBack = new TextButton("Back", fontLarge, SCR_WIDTH/2, 200);
+        btnBack = new TextButton("Back", fontLarge, SCR_WIDTH/2, 100);
         loadSettings();
         updateButtons();
         if(mg.isMusicOn) {
@@ -70,7 +72,12 @@ public class ScreenSettings implements Screen {
                 }
                 updateButtons();
             }
+            if(btnClearRecords.hit(touch.x, touch.y)) {
+                btnClearRecords.updateText("Records cleared");
+                mg.screenGame.clearTableOfRecords();
+            }
             if(btnBack.hit(touch.x, touch.y)) {
+                btnClearRecords.updateText("Clear Records");
                 mg.setScreen(mg.screenIntro);
                 saveSettings();
             }
@@ -88,6 +95,7 @@ public class ScreenSettings implements Screen {
         batch.draw(imgBG, 0, 0, SCR_WIDTH, SCR_HEIGHT); // фон
         btnSound.font.draw(batch, btnSound.text, btnSound.scrX(), btnSound.scrY());
         btnMusic.font.draw(batch, btnMusic.text, btnMusic.scrX(), btnMusic.scrY());
+        btnClearRecords.font.draw(batch, btnClearRecords.text, btnClearRecords.scrX(), btnClearRecords.scrY());
         btnBack.font.draw(batch, btnBack.text, btnBack.scrX(), btnBack.scrY());
         batch.end();
         //------------------------------------------------------------------
@@ -120,14 +128,14 @@ public class ScreenSettings implements Screen {
 
     void updateButtons() {
         if(mg.isSoundOn) {
-            btnSound.text = "Sound On";
+            btnSound.updateText("Sound On");
         } else {
-            btnSound.text = "Sound Off";
+            btnSound.updateText("Sound Off");
         }
         if(mg.isMusicOn) {
-            btnMusic.text = "Music On";
+            btnMusic.updateText("Music On");
         } else {
-            btnMusic.text = "Music Off";
+            btnMusic.updateText("Music Off");
         }
     }
 
