@@ -18,10 +18,10 @@ public class ScreenGame implements Screen {
     Texture imgBG;
     Texture[] imgMosq = new Texture[11];
     Texture imgPause, imgPlay;
-    Sound[] sndMosq = new Sound[25];
+    Sound[] sndMosq = new Sound[5];
 
     // наши переменные и объекты
-    Mosquito[] mosq = new Mosquito[5];
+    Mosquito[] mosq = new Mosquito[25];
     Player[] players = new Player[6];
     int frags;
     long time, timeStartGame, timePause;
