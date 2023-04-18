@@ -21,11 +21,11 @@ public class MyGame extends Game {
 	public static final float SCR_WIDTH = 1280, SCR_HEIGHT = 720;
 
 	// ссылки на системные объекты
-	static SpriteBatch batch;
-	static OrthographicCamera camera;
-	static Vector3 touch;
-	static BitmapFont font, fontLarge;
-	static InputKeyboard keyboard;
+	SpriteBatch batch;
+	OrthographicCamera camera;
+	Vector3 touch;
+	BitmapFont font, fontLarge;
+	InputKeyboard keyboard;
 
 	// ссылки на экраны
 	ScreenIntro screenIntro;
@@ -33,6 +33,7 @@ public class MyGame extends Game {
 	ScreenGame screenGame;
 	ScreenAbout screenAbout;
 
+	// флаги включения звука и музыки
 	boolean isSoundOn = true;
 	boolean isMusicOn = true;
 

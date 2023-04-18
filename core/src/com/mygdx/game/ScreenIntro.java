@@ -23,10 +23,10 @@ public class ScreenIntro implements Screen {
     public ScreenIntro(MyGame myGame) {
         mg = myGame;
         imgBG = new Texture("landscape02.jpg");
-        btnPlay = new TextButton("Play", fontLarge, SCR_WIDTH/2, 500);
-        btnSettings = new TextButton("Settings", fontLarge, SCR_WIDTH/2, 400);
-        btnAbout = new TextButton("About", fontLarge, SCR_WIDTH/2, 300);
-        btnExit = new TextButton("Exit", fontLarge, SCR_WIDTH/2, 200);
+        btnPlay = new TextButton("Play", mg.fontLarge, SCR_WIDTH/2, 500);
+        btnSettings = new TextButton("Settings", mg.fontLarge, SCR_WIDTH/2, 400);
+        btnAbout = new TextButton("About", mg.fontLarge, SCR_WIDTH/2, 300);
+        btnExit = new TextButton("Exit", mg.fontLarge, SCR_WIDTH/2, 200);
     }
 
     @Override
@@ -38,18 +38,18 @@ public class ScreenIntro implements Screen {
     public void render(float delta) {
         // ----------- обработка касаний (или кликов) ----------------------
         if(Gdx.input.justTouched()){
-            touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            camera.unproject(touch);
-            if(btnPlay.hit(touch.x, touch.y)) {
+            mg.touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+            mg.camera.unproject(mg.touch);
+            if(btnPlay.hit(mg.touch.x, mg.touch.y)) {
                 mg.setScreen(mg.screenGame);
             }
-            if(btnSettings.hit(touch.x, touch.y)) {
+            if(btnSettings.hit(mg.touch.x, mg.touch.y)) {
                 mg.setScreen(mg.screenSettings);
             }
-            if(btnAbout.hit(touch.x, touch.y)) {
+            if(btnAbout.hit(mg.touch.x, mg.touch.y)) {
                 mg.setScreen(mg.screenAbout);
             }
-            if(btnExit.hit(touch.x, touch.y)) {
+            if(btnExit.hit(mg.touch.x, mg.touch.y)) {
                 Gdx.app.exit();
             }
         }
@@ -60,15 +60,15 @@ public class ScreenIntro implements Screen {
         //------------------------------------------------------------------
 
         // ------------ отрисовка всех изображений -------------------------
-        camera.update();
-        batch.setProjectionMatrix(camera.combined);
-        batch.begin();
-        batch.draw(imgBG, 0, 0, SCR_WIDTH, SCR_HEIGHT); // фон
-        btnPlay.font.draw(batch, btnPlay.text, btnPlay.scrX(), btnPlay.scrY());
-        btnSettings.font.draw(batch, btnSettings.text, btnSettings.scrX(), btnSettings.scrY());
-        btnAbout.font.draw(batch, btnAbout.text, btnAbout.scrX(), btnAbout.scrY());
-        btnExit.font.draw(batch, btnExit.text, btnExit.scrX(), btnExit.scrY());
-        batch.end();
+        mg.camera.update();
+        mg.batch.setProjectionMatrix(mg.camera.combined);
+        mg.batch.begin();
+        mg.batch.draw(imgBG, 0, 0, SCR_WIDTH, SCR_HEIGHT); // фон
+        btnPlay.font.draw(mg.batch, btnPlay.text, btnPlay.scrX(), btnPlay.scrY());
+        btnSettings.font.draw(mg.batch, btnSettings.text, btnSettings.scrX(), btnSettings.scrY());
+        btnAbout.font.draw(mg.batch, btnAbout.text, btnAbout.scrX(), btnAbout.scrY());
+        btnExit.font.draw(mg.batch, btnExit.text, btnExit.scrX(), btnExit.scrY());
+        mg.batch.end();
         //------------------------------------------------------------------
     }
 

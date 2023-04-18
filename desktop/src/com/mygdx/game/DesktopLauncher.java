@@ -10,7 +10,7 @@ public class DesktopLauncher {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(60);
 		config.setTitle("Shkod Mosquito Killer");
-		config.setWindowedMode((int)MyGame.SCR_WIDTH, (int)MyGame.SCR_HEIGHT);
+		config.setWindowedMode(1600, 900); // устанавливаем размер окна
 		new Lwjgl3Application(new MyGame(), config);
 	}
 }

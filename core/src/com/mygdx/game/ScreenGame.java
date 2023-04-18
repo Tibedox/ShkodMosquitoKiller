@@ -52,7 +52,7 @@ public class ScreenGame implements Screen {
         }
 
         btnPause = new ImageButton(imgPause, SCR_WIDTH/2, SCR_HEIGHT-5-70f/2, 70, 70);
-        btnBack = new TextButton("Back", font, SCR_WIDTH-80, 50);
+        btnBack = new TextButton("Back", mg.font, SCR_WIDTH-80, 50);
 
         loadTableOfRecords();
     }
@@ -72,12 +72,12 @@ public class ScreenGame implements Screen {
     public void render(float delta) {
 // ----------- обработка касаний (или кликов) ----------------------
         if(Gdx.input.justTouched()){
-            touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            camera.unproject(touch);
+            mg.touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+            mg.camera.unproject(mg.touch);
             if(stateOfGame == PLAY_GAME) {
                 if(!pause) {
                     for (int i = mosq.length - 1; i >= 0; i--) {
-                        if (mosq[i].hit(touch.x, touch.y) && mosq[i].isAlive) {
+                        if (mosq[i].hit(mg.touch.x, mg.touch.y) && mosq[i].isAlive) {
                             mosq[i].kill();
                             if(mg.isSoundOn) {
                                 sndMosq[MathUtils.random(0, 4)].play();
@@ -91,10 +91,10 @@ public class ScreenGame implements Screen {
                         }
                     }
                 }
-                if(btnBack.hit(touch.x, touch.y)) {
+                if(btnBack.hit(mg.touch.x, mg.touch.y)) {
                     mg.setScreen(mg.screenIntro);
                 }
-                if(btnPause.hit(touch.x, touch.y)){
+                if(btnPause.hit(mg.touch.x, mg.touch.y)){
                     pause = !pause;
 
 					/*if(pause) btnPause.img = imgPlay;
@@ -103,8 +103,8 @@ public class ScreenGame implements Screen {
                 }
             } else if(stateOfGame == ENTER_NAME) {
                 // если завершён ввод имени, состояние игры переключается на показ таблицы рекордов
-                if(keyboard.endOfEdit(touch.x, touch.y)){
-                    players[players.length-1].name = keyboard.getText();
+                if(mg.keyboard.endOfEdit(mg.touch.x, mg.touch.y)){
+                    players[players.length-1].name = mg.keyboard.getText();
                     players[players.length-1].time = time;
                     sortTableOfRecords();
                     saveTableOfRecords();
@@ -132,30 +132,30 @@ public class ScreenGame implements Screen {
         //------------------------------------------------------------------
 
         // ------------ отрисовка всех изображений -------------------------
-        camera.update();
-        batch.setProjectionMatrix(camera.combined);
-        batch.begin();
+        mg.camera.update();
+        mg.batch.setProjectionMatrix(mg.camera.combined);
+        mg.batch.begin();
         // фон
-        batch.draw(imgBG, 0, 0, SCR_WIDTH, SCR_HEIGHT);
+        mg.batch.draw(imgBG, 0, 0, SCR_WIDTH, SCR_HEIGHT);
         // комары
         for (int i = 0; i < mosq.length; i++) {
-            batch.draw(imgMosq[mosq[i].phase], mosq[i].scrX(), mosq[i].scrY(), mosq[i].width, mosq[i].height, 0, 0, 500, 500, mosq[i].flip(), false);
+            mg.batch.draw(imgMosq[mosq[i].phase], mosq[i].scrX(), mosq[i].scrY(), mosq[i].width, mosq[i].height, 0, 0, 500, 500, mosq[i].flip(), false);
         }
         // тексты
-        font.draw(batch, "FRAGS: "+frags, 10, SCR_HEIGHT-10);
-        font.draw(batch, "TIME: "+timeToString(time), SCR_WIDTH-300, SCR_HEIGHT-10);
-        batch.draw(btnPause.img, btnPause.scrX(), btnPause.scrY(), btnPause.width, btnPause.height);
-        btnBack.font.draw(batch, btnBack.text, btnBack.scrX(), btnBack.scrY());
+        mg.font.draw(mg.batch, "FRAGS: "+frags, 10, SCR_HEIGHT-10);
+        mg.font.draw(mg.batch, "TIME: "+timeToString(time), SCR_WIDTH-300, SCR_HEIGHT-10);
+        mg.batch.draw(btnPause.img, btnPause.scrX(), btnPause.scrY(), btnPause.width, btnPause.height);
+        btnBack.font.draw(mg.batch, btnBack.text, btnBack.scrX(), btnBack.scrY());
         if(stateOfGame == ENTER_NAME){
-            keyboard.draw(batch);
+            mg.keyboard.draw(mg.batch);
         }
         if(stateOfGame == SHOW_RECORDS){
             // выводим таблицу рекордов
             for (int i = 0; i < players.length-1; i++) {
-                font.draw(batch, players[i].name+" .... "+timeToString(players[i].time), 500, 600-80*i);
+                mg.font.draw(mg.batch, players[i].name+" .... "+timeToString(players[i].time), 500, 600-80*i);
             }
         }
-        batch.end();
+        mg.batch.end();
         //------------------------------------------------------------------
     }
 

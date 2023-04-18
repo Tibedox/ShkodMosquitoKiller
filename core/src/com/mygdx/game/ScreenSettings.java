@@ -2,10 +2,6 @@ package com.mygdx.game;
 
 import static com.mygdx.game.MyGame.SCR_HEIGHT;
 import static com.mygdx.game.MyGame.SCR_WIDTH;
-import static com.mygdx.game.MyGame.batch;
-import static com.mygdx.game.MyGame.camera;
-import static com.mygdx.game.MyGame.fontLarge;
-import static com.mygdx.game.MyGame.touch;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
@@ -36,11 +32,11 @@ public class ScreenSettings implements Screen {
 
         music.setLooping(true);
 
-        btnSound = new TextButton("Sound On", fontLarge, SCR_WIDTH/2, 550);
-        btnMusic = new TextButton("Music On", fontLarge, SCR_WIDTH/2, 450);
-        btnClearRecords = new TextButton("Clear Records", fontLarge, SCR_WIDTH/2, 350);
+        btnSound = new TextButton("Sound On", mg.fontLarge, SCR_WIDTH/2, 550);
+        btnMusic = new TextButton("Music On", mg.fontLarge, SCR_WIDTH/2, 450);
+        btnClearRecords = new TextButton("Clear Records", mg.fontLarge, SCR_WIDTH/2, 350);
 
-        btnBack = new TextButton("Back", fontLarge, SCR_WIDTH/2, 100);
+        btnBack = new TextButton("Back", mg.fontLarge, SCR_WIDTH/2, 100);
         loadSettings();
         updateButtons();
         if(mg.isMusicOn) {
@@ -57,13 +53,13 @@ public class ScreenSettings implements Screen {
     public void render(float delta) {
         // ----------- обработка касаний (или кликов) ----------------------
         if(Gdx.input.justTouched()){
-            touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            camera.unproject(touch);
-            if(btnSound.hit(touch.x, touch.y)) {
+            mg.touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+            mg.camera.unproject(mg.touch);
+            if(btnSound.hit(mg.touch.x, mg.touch.y)) {
                 mg.isSoundOn = !mg.isSoundOn;
                 updateButtons();
             }
-            if(btnMusic.hit(touch.x, touch.y)) {
+            if(btnMusic.hit(mg.touch.x, mg.touch.y)) {
                 mg.isMusicOn = !mg.isMusicOn;
                 if(mg.isMusicOn) {
                     music.play();
@@ -72,11 +68,11 @@ public class ScreenSettings implements Screen {
                 }
                 updateButtons();
             }
-            if(btnClearRecords.hit(touch.x, touch.y)) {
+            if(btnClearRecords.hit(mg.touch.x, mg.touch.y)) {
                 btnClearRecords.updateText("Records cleared");
                 mg.screenGame.clearTableOfRecords();
             }
-            if(btnBack.hit(touch.x, touch.y)) {
+            if(btnBack.hit(mg.touch.x, mg.touch.y)) {
                 btnClearRecords.updateText("Clear Records");
                 mg.setScreen(mg.screenIntro);
                 saveSettings();
@@ -89,15 +85,15 @@ public class ScreenSettings implements Screen {
         //------------------------------------------------------------------
 
         // ------------ отрисовка всех изображений -------------------------
-        camera.update();
-        batch.setProjectionMatrix(camera.combined);
-        batch.begin();
-        batch.draw(imgBG, 0, 0, SCR_WIDTH, SCR_HEIGHT); // фон
-        btnSound.font.draw(batch, btnSound.text, btnSound.scrX(), btnSound.scrY());
-        btnMusic.font.draw(batch, btnMusic.text, btnMusic.scrX(), btnMusic.scrY());
-        btnClearRecords.font.draw(batch, btnClearRecords.text, btnClearRecords.scrX(), btnClearRecords.scrY());
-        btnBack.font.draw(batch, btnBack.text, btnBack.scrX(), btnBack.scrY());
-        batch.end();
+        mg.camera.update();
+        mg.batch.setProjectionMatrix(mg.camera.combined);
+        mg.batch.begin();
+        mg.batch.draw(imgBG, 0, 0, SCR_WIDTH, SCR_HEIGHT); // фон
+        btnSound.font.draw(mg.batch, btnSound.text, btnSound.scrX(), btnSound.scrY());
+        btnMusic.font.draw(mg.batch, btnMusic.text, btnMusic.scrX(), btnMusic.scrY());
+        btnClearRecords.font.draw(mg.batch, btnClearRecords.text, btnClearRecords.scrX(), btnClearRecords.scrY());
+        btnBack.font.draw(mg.batch, btnBack.text, btnBack.scrX(), btnBack.scrY());
+        mg.batch.end();
         //------------------------------------------------------------------
     }
 
